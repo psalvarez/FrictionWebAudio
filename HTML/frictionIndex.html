@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../CSS/index.css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300|Grand+Hotel" rel="stylesheet" type="text/css" />
+
+    <script src="../js/jsap.js"></script>
+    <script src="../js/NexusUI2.js"></script>
+
+    <!-- INCLUDE YOUR PLUGIN SOURCE FILE HERE -->
+    <script src="../jsap-plugins/frictionPlugin.js"></script>
+</head>
+<body>
+    <div id="main-container">
+        <header>
+            <h1>Template</h1>
+        </header>
+
+        <div class=main-content align="center">
+
+            <div class="controls-container">
+                    <p>Enable Web Audio</p>
+                    <div id="audioContext" style="padding-bottom: 1%"></div>
+
+                    <!--### ENTER YOUR NEXUS CONTROLS HERE -->
+                    <p>External Force</p>
+                    <div id="externalForce" style="padding-bottom: 1%"></div> <span id="forceDisp"></span>
+
+                    <!-- <div id="myButton"></div> -->
+            </div>
+
+            <div class="container">
+                <p>Spectrogram</p>
+                <div id="spectrogram" align="center"></div>
+            </div>
+
+            <div class="container">
+                <p>Oscilloscope</p>
+                <div id="osc" align="center"></div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        let audioContextButton = new Nexus.Toggle('audioContext', {
+            'size': [40, 20],
+            'state': false
+        });
+
+        /*** DEFINE NEXUS CONTROLS HERE ***/
+
+        // let myButton = new Nexus.TextButton('myButton', {
+        //     'mode': 'button',
+        //     'size': [120,55],
+        //     'state': false,
+        //     'text': 'Button'
+        // });
+
+        let externalForce = new Nexus.Slider('externalForce', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': -3,
+            'max': 3,
+            'step': 0.01,
+            'value': 0
+        });
+
+        //Number box
+        let forceDisplay = new Nexus.Number('forceDisp');
+        forceDisplay.link(externalForce);
+    </script>
+
+    <script type="application/javascript">
+        window.AudioContext = (window.AudioContext || window.webkitAudioContext || window.mozAudioContext);
+
+        //Define audio context
+        let context = new AudioContext();
+        Nexus.context = context;
+        context.suspend();
+
+        //Start and end points for JSAP audio chain
+        let chainStart = context.createGain();
+        let chainStop = context.createGain();
+
+        //Create factory
+        let Factory = new PluginFactory(context);
+
+        /*** ADD YOUR PLUGIN PROTOTYPE HERE ***/
+        Factory.addPrototype(frictionPlugin);
+
+        //Link up chain and add plugin
+        let soundFxChain = Factory.createSubFactory(chainStart, chainStop);
+        let param = soundFxChain.createPlugin(Factory.getPrototypes()[0]);
+        chainStop.connect(context.destination);
+
+        let containerWidth = document.getElementsByClassName("container");
+
+        let oscilloscope = new Nexus.Oscilloscope('osc',{
+            'size': [containerWidth[0].offsetWidth-20,150]
+        });
+
+        let spectrogram = new Nexus.Spectrogram('#spectrogram', {
+            'size' : [containerWidth[0].offsetWidth-20, 300]
+        });
+
+        //Set up spectrogram and oscilloscope colors
+        spectrogram.colorize("fill", "#B4EDD2");
+        spectrogram.colorize("accent", "#646464");
+        oscilloscope.colorize("fill", "#B4EDD2");
+        oscilloscope.colorize("accent", "#646464");
+
+        window.onresize = function() {
+            spectrogram.resize(containerWidth[0].offsetWidth-20, 300);
+            oscilloscope.resize(containerWidth[0].offsetWidth - 20, 150);
+            space.resize(containerWidth[0].offsetWidth-30, 300);
+        }
+
+        audioContextButton.on('change', function(v) {
+            context.resume();
+        });
+
+        /*** ADD EVENT LISTENERS FOR NEXUS ELEMENTS HERE ***/
+
+        // myButton.on('change', function(v) {
+        //     console.log(v);
+        //     param.node.parameters.getParameterByName('myButton').onclick();
+        // });
+
+        spectrogram.connect(chainStop);
+        oscilloscope.connect(chainStop);
+
+    </script>
+</body>
+</html>
