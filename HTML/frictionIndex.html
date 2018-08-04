@@ -8,6 +8,9 @@
 
     <script src="../js/jsap.js"></script>
     <script src="../js/NexusUI2.js"></script>
+    <script src="../js/utilities.js"></script>
+    <script src="../js/resonator.js"></script>
+    <script src="../js/interactor.js"></script>
 
     <!-- INCLUDE YOUR PLUGIN SOURCE FILE HERE -->
     <script src="../jsap-plugins/frictionPlugin.js"></script>
@@ -123,6 +126,10 @@
 
         /*** ADD EVENT LISTENERS FOR NEXUS ELEMENTS HERE ***/
 
+        externalForce.on('change', function(v){
+            param.node.parameters.setParameterByName('externalForce', v);
+        })
+        
         // myButton.on('change', function(v) {
         //     console.log(v);
         //     param.node.parameters.getParameterByName('myButton').onclick();

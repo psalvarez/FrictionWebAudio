@@ -46,6 +46,55 @@ function Resonator () {
 }
 
 
+//Updates
+function updateModes(r) {
+    for (var mode = 0; mode < r.activeModes; mode++) {
+        updateMode(r, mode);
+    }
+}
+
+function updateMode (x, mode) {
+    var u, w, wt, m, k, d, g, r, coswt, sincwt, tsincwt;
+
+    u = Math.sqrt(x.fragmentSize);
+    w = 2*Math.PI * x.freqs[mode];
+    wt = w * timeStep / u;
+    m = x.weights[mode] * x.fragmentSize;
+    k = w * w * x.weights[mode];
+    if (wt < Math.acos(-0.9995) && m > 0.000001) {
+        d = x.decays[mode] * u;
+        g = d > 0.0 ? 2.0 / d : 0.0;
+        r = Math.exp(-g * timeStep);
+        coswt = Math.cos(wt);
+        sincwt = wt > 0.0 ? Math.sin(wt) / wt : 1.0;
+        tsincwt = sincwt * timeStep;
+        x.b1[mode] = r * sincwt * timeStep * timeStep / m;
+        x.a1[mode] = -2.0 * r * coswt;
+        x.a2[mode] = r * r;
+        x.b0v[mode] = coswt / tsincwt - g;
+        x.b1v[mode] = -r / tsincwt;
+        x.v[mode] *= Math.sqrt(x.m[mode] / m);
+        x.p0[mode] *= k > 0.0 ? Math.sqrt(x.k[mode] / k) : 1.0;
+        updateState(x, mode);
+        x.m[mode] = m;
+        x.k[mode] = k;
+    }
+    else {
+        x.m[mode] = 0.0;
+        x.k[mode] = 0.0;
+        x.b1[mode] = 0.0;
+        x.a1[mode] = 0.0;
+        x.a2[mode] = 0.0;
+        x.b0v[mode] = 0.0;
+        x.b1v[mode] = 0.0;
+    }
+}
+
+function updateState (x, mode) {
+    x.p1[mode] = (x.v[mode] - x.b0v[mode] * x.p0[mode]) / x.b1v[mode];
+}
+
+
 //Resonator functions
 function modalPosition(r, mode) {
     return clip(r.b1[mode] * r.f[mode] - r.a1[mode] * r.p0[mode] - r.a2[mode] * r.p1[mode], -MAX_POS, MAX_POS);

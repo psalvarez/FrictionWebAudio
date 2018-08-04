@@ -1,3 +1,11 @@
+//Constants
+const MAX_ERROR = 0.001;
+const MAX_ITERATIONS = 50;
+const MAX_POS = 10000.0;
+const LCG_MULT = 1664525;
+const LCG_ADD = 1013904223;
+
+//Functions
 function clip(x, min, max) {
   if (x < min) x = min;
   else if (x > max) x = max;

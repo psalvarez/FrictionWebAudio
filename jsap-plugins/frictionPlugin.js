@@ -9,19 +9,18 @@ var frictionPlugin = function (factory, owner) {
     let input = this.context.createGain();
     let output = this.context.createGain();
 
-    //Audio No’des and settings variables
-    this.frictionNode = this.context.createScriptProcessor(length, 1, 1);
-
+    //Audio Nodes and settings variables
     //this.context.sampleRate = 44100;’
-    timeStep = 1/this.context.sampleRate;
+    let timeStep = 1/this.context.sampleRate;
     let length = 4096;
+
+    this.frictionNode = this.context.createScriptProcessor(length, 1, 1);
 
     //Control Variables
     this.Friction = {
         friction:  Object.create(Interactor),
-        //Keys are for identification in the original code, so don't think they are needed here
-        //var key0, key1:
-        force: 0.5, //Normal force in Newtons (this might have to be variable)
+
+        force: 0.5, //Normal force in Newtons
 
         //These are control variables. The variables that intervene in the calculations are derived from these
         stribeck: 0.1,
@@ -48,13 +47,14 @@ var frictionPlugin = function (factory, owner) {
 
     //####### PARAMETERS ########//
     let extForceParam = this.parameters.createNumberParameter("externalForce", 1, -3, 3);
+    //extForceParam.bindToAudioParam(this.externalForce);
 
     //####### AUDIO CODE #######//
-    frictionNode.onaudioprocess = function (e){
+    this.frictionNode.onaudioprocess = function (e){
         var outs = new Array (2);
         var audioOut = e.outputBuffer.getChannelData(0);
         for (var i = 0; i < length; i++){ //Frame loop
-            interactorDSP(this.Friction.friction, f0, 0, 0, 0, 0, 0, outs);
+            interactorDSP(this.Friction.friction, this.externalForce, 0, 0, 0, 0, 0, outs);
             audioOut[i] = 100000*outs[1]; //For now, we are just picking one pickup point from one object
         }
     }
