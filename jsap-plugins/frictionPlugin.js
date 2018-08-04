@@ -9,10 +9,10 @@ var frictionPlugin = function (factory, owner) {
     let input = this.context.createGain();
     let output = this.context.createGain();
 
-    //Audio Nodes and settings variables
-    this.frictionNode = ctx.createScriptProcessor(length, 1, 1);
+    //Audio No’des and settings variables
+    this.frictionNode = this.context.createScriptProcessor(length, 1, 1);
 
-    //this.context.sampleRate = 44100;
+    //this.context.sampleRate = 44100;’
     timeStep = 1/this.context.sampleRate;
     let length = 4096;
 
@@ -47,6 +47,7 @@ var frictionPlugin = function (factory, owner) {
 
 
     //####### PARAMETERS ########//
+    let extForceParam = this.parameters.createNumberParameter("externalForce", 1, -3, 3);
 
     //####### AUDIO CODE #######//
     frictionNode.onaudioprocess = function (e){
