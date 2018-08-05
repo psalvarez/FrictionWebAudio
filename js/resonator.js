@@ -56,9 +56,11 @@ function updateModes(r) {
 function updateMode (x, mode) {
     var u, w, wt, m, k, d, g, r, coswt, sincwt, tsincwt;
 
+    var timeStep = 1/context.sampleRate;
+
     u = Math.sqrt(x.fragmentSize);
     w = 2*Math.PI * x.freqs[mode];
-    wt = w * timeStep / u;
+    wt = w * (timeStep) / u;
     m = x.weights[mode] * x.fragmentSize;
     k = w * w * x.weights[mode];
     if (wt < Math.acos(-0.9995) && m > 0.000001) {

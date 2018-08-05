@@ -54,7 +54,7 @@ function setStribeckVelocity (inter, f) {
 //Static coefficient
 function setStaticCoefficient (inter, f) {
     var s = inter.state;
-    s.ks = clip(Friction.kStatic, 0.0, 1.0);
+    s.ks = clip(f, 0.0, 1.0);
     s.fs = s.fn * s.ks;
 }
 //Dynamic coefficient
@@ -120,7 +120,7 @@ function frictionElastoPlastic(x) {
     if (!isNormal(dz)) dz = 0.0;
     w = whiteNoise() * Math.sqrt(Math.abs(v) * s.fn);
     f = s.s0 * s.z + s.s1 * dz + s.s2 * v + s.s3 * w;
-    s.z += dz * (1/ctx.sampleRate);
+    s.z += dz * (1/context.sampleRate);
     return f;
 }
 

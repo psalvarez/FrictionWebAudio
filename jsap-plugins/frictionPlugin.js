@@ -9,9 +9,6 @@ var frictionPlugin = function (factory, owner) {
     let input = this.context.createGain();
     let output = this.context.createGain();
 
-    //Audio Nodes and settings variables
-    //this.context.sampleRate = 44100;’
-    let timeStep = 1/this.context.sampleRate;
     let length = 4096;
 
     this.frictionNode = this.context.createScriptProcessor(length, 1, 1);
@@ -43,8 +40,18 @@ var frictionPlugin = function (factory, owner) {
     Friction.friction.obj0.fragmentSize = 1;
 
     //This will set the rest of the values automatically, but should be removed when added as controls
+    setNormalForce(Friction.friction, Friction.force);
+    setStribeckVelocity (Friction.friction, Friction.stribeck);
+    setStaticCoefficient (Friction.friction, Friction.kStatic);
+    setDynamicCoefficient (Friction.friction, Friction.kDynamic);
+    setBreakAway(Friction.friction, Friction.breakAway);
+    setStiffness(Friction.friction, Friction.stiffness);
+    setDissipation(Friction.friction, Friction.dissipation);
+    setViscosity(Friction.friction, Friction.viscosity);
+    setNoisiness(Friction.friction, Friction.noisiness);
 
-
+    updateModes(Friction.friction.obj0);
+    updateModes(Friction.friction.obj1);
     //let externalForce = 1;
 
 
