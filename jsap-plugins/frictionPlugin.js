@@ -17,7 +17,7 @@ var frictionPlugin = function (factory, owner) {
     this.frictionNode = this.context.createScriptProcessor(length, 1, 1);
 
     //Control Variables
-    this.Friction = {
+    let Friction = {
         friction:  Object.create(Interactor),
 
         force: 0.5, //Normal force in Newtons
@@ -35,14 +35,17 @@ var frictionPlugin = function (factory, owner) {
         contact1: 0
     }
 
-    this.Friction.friction.obj0.activeModes = 1;
-    this.Friction.friction.obj0.freqs[0] = 0;
-    this.Friction.friction.obj0.decays[0] = 0;
-    this.Friction.friction.obj0.weights[0] = 0.001022;
-    this.Friction.friction.obj0.gains[0][0] = 1;
-    this.Friction.friction.obj0.fragmentSize = 1;
+    Friction.friction.obj0.activeModes = 1;
+    Friction.friction.obj0.freqs[0] = 0;
+    Friction.friction.obj0.decays[0] = 0;
+    Friction.friction.obj0.weights[0] = 0.001022;
+    Friction.friction.obj0.gains[0][0] = 1;
+    Friction.friction.obj0.fragmentSize = 1;
 
-    this.externalForce = 1;
+    //This will set the rest of the values automatically, but should be removed when added as controls
+
+
+    //let externalForce = 1;
 
 
     //####### PARAMETERS ########//
@@ -54,9 +57,10 @@ var frictionPlugin = function (factory, owner) {
         var outs = new Array (2);
         var audioOut = e.outputBuffer.getChannelData(0);
         for (var i = 0; i < length; i++){ //Frame loop
-            interactorDSP(this.Friction.friction, this.externalForce, 0, 0, 0, 0, 0, outs);
+            interactorDSP(Friction.friction, extForceParam.value, 0, 0, 0, 0, 0, outs);
             audioOut[i] = 100000*outs[1]; //For now, we are just picking one pickup point from one object
         }
+        console.log(audioOut[0]);
     }
 
     //Add these at the bottom of your plugin
