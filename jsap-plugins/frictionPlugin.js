@@ -14,6 +14,8 @@ var frictionPlugin = function (factory, owner) {
     this.frictionNode = this.context.createScriptProcessor(length, 1, 1);
 
     //Control Variables
+
+    //This variable must be eliminated when every control is added
     let Friction = {
         friction:  Object.create(Interactor),
 
@@ -39,8 +41,7 @@ var frictionPlugin = function (factory, owner) {
     Friction.friction.obj0.gains[0][0] = 1;
     Friction.friction.obj0.fragmentSize = 1;
 
-    //This will set the rest of the values automatically, but should be removed when added as controls
-
+    //Initial settings (must find a more elegant way of doing this)
     setNormalForce(Friction.friction, Friction.force);
     setStribeckVelocity (Friction.friction, Friction.stribeck);
     setStaticCoefficient (Friction.friction, Friction.kStatic);
@@ -53,13 +54,10 @@ var frictionPlugin = function (factory, owner) {
 
     updateModes(Friction.friction.obj0);
     updateModes(Friction.friction.obj1);
-    //let externalForce = 1;
-
 
     //####### PARAMETERS ########//
 
     let extForceParam = this.parameters.createNumberParameter("externalForce", 1, -3, 3);
-
 
     //Friction Parameters
     let normForceParam = this.parameters.createNumberParameter("normalForce", 0.5, 0, 1);
@@ -71,6 +69,14 @@ var frictionPlugin = function (factory, owner) {
     let dissipationParam = this.parameters.createNumberParameter("dissipation", 35.925926, 0, 40);
     let viscosityParam = this.parameters.createNumberParameter("viscosity", 5.55555, 0, 10);
     let noisinessParam  = this.parameters.createNumberParameter("noisiness", 0.844167, 0.01, 1);
+
+    //Inertial Resonator Parameters
+    let inertialModes = this.parameters.createNumberParameter("", , , );
+    let inertialFreqs = this.parameters.createNumberParameter("", , , );
+    let inertialDecays = this.parameters.createNumberParameter("", , , );
+    let inertialWeights = this.parameters.createNumberParameter("", , , );
+    let inertialGains = this.parameters.createNumberParameter("", , , );
+    let inertialSize = this.parameters.createNumberParameter("", , , );
 
     //Control functions
     extForceParam.trigger = function () {
