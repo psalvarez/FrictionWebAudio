@@ -73,7 +73,7 @@ var frictionPlugin = function (factory, owner) {
     //Inertial Resonator Parameters
 
     let inertialWeightParam = this.parameters.createNumberParameter("inertialWeight", 0.001022, 0.001, 1);
-    let inertialSizeParam = this.parameters.createNumberParameter("inertialSize", 1, 0, 1);
+    let inertialSizeParam = this.parameters.createNumberParameter("inertialSize", 1, 0.3, 1); //The minimum here should be 0, but it explodes when going below 0.2. Therefore, this is kept as a safety measure until I am able to fix it
 
     //Control functions
     extForceParam.trigger = function () {
