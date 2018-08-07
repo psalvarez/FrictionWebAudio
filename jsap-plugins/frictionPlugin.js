@@ -71,18 +71,16 @@ var frictionPlugin = function (factory, owner) {
     let noisinessParam  = this.parameters.createNumberParameter("noisiness", 0.844167, 0.01, 1);
 
     //Inertial Resonator Parameters
-    let inertialModes = this.parameters.createNumberParameter("", , , );
-    let inertialFreqs = this.parameters.createNumberParameter("", , , );
-    let inertialDecays = this.parameters.createNumberParameter("", , , );
-    let inertialWeights = this.parameters.createNumberParameter("", , , );
-    let inertialGains = this.parameters.createNumberParameter("", , , );
-    let inertialSize = this.parameters.createNumberParameter("", , , );
+
+    let inertialWeightParam = this.parameters.createNumberParameter("inertialWeight", 0.001022, 0.001, 1);
+    let inertialSizeParam = this.parameters.createNumberParameter("inertialSize", 1, 0, 1);
 
     //Control functions
     extForceParam.trigger = function () {
         let a = 2;
     }.bind(this);
 
+    //Friction
     normForceParam.trigger = function () {
         setNormalForce(Friction.friction, normForceParam.value);
     }.bind(normForceParam);
@@ -111,6 +109,17 @@ var frictionPlugin = function (factory, owner) {
         setNoisiness(Friction.friction, noisinessParam.value);
     }.bind(this);
 
+    //Inertial
+    inertialWeightParam.trigger = function () {
+        Friction.friction.obj0.weights[0] = inertialWeightParam.value;
+        updateModes(Friction.friction.obj0);
+    }.bind(this);
+
+    inertialSizeParam.trigger = function () {
+        Friction.friction.obj0.fragmentSize = inertialSizeParam.value;
+        updateModes(Friction.friction.obj0);
+    }.bind(this);
+
     //####### AUDIO CODE #######//
 
     this.frictionNode.onaudioprocess = function (e){
@@ -119,8 +128,11 @@ var frictionPlugin = function (factory, owner) {
         for (var i = 0; i < length; i++){ //Frame loop
             interactorDSP(Friction.friction, extForceParam.value, 0, 0, 0, 0, 0, outs);
             audioOut[i] = 100000*outs[1]; //For now, we are just picking one pickup point from one object
+            /*if (Math.abs(audioOut[i]) > 0.05) {
+                console.log(audioOut[i]);
+            }*/
         }
-        //console.log(audioOut[0]);
+
     }
 
     //Add these at the bottom of your plugin
