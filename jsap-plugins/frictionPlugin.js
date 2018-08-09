@@ -40,6 +40,7 @@ var frictionPlugin = function (factory, owner) {
     Friction.friction.obj0.weights[0] = 0.001022;
     Friction.friction.obj0.gains[0][0] = 1;
     Friction.friction.obj0.fragmentSize = 1;
+    updatePickup(Friction.friction.obj0, 0);
 
     //Initial settings (must find a more elegant way of doing this)
     setNormalForce(Friction.friction, Friction.force);
