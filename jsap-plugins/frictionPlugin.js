@@ -1,4 +1,4 @@
-var frictionPlugin = function (factory, owner) {
+decayvar frictionPlugin = function (factory, owner) {
     BasePlugin.call(this, factory, owner);
 
     this.onload = function(e) {}
@@ -54,7 +54,6 @@ var frictionPlugin = function (factory, owner) {
 
     updateModes(Friction.friction.obj0);
     updateModes(Friction.friction.obj1);
-    //let externalForce = 1;
 
 
     //####### PARAMETERS ########//
@@ -72,6 +71,17 @@ var frictionPlugin = function (factory, owner) {
     let dissipationParam = this.parameters.createNumberParameter("dissipation", 35.925926, 0, 40);
     let viscosityParam = this.parameters.createNumberParameter("viscosity", 5.55555, 0, 10);
     let noisinessParam  = this.parameters.createNumberParameter("noisiness", 0.844167, 0.01, 1);
+
+    //Modal Parameters
+    let freq1Param = this.parameters.createNumberParameter("freq1", 500, 20, 20000);
+    let freq2Param = this.parameters.createNumberParameter("freq2", 600, 20, 20000);
+    let freq3Param = this.parameters.createNumberParameter("freq3", 910, 20, 20000);
+
+    let decay1Param = this.parameters.createNumberParameter("decay1", 500, 20, 20000);
+    let decay2Param = this.parameters.createNumberParameter("decay2", 600, 20, 20000);
+    let decay3Param = this.parameters.createNumberParameter("decay3", 910, 20, 20000);
+
+
 
     //Control functions
     extForceParam.trigger = function () {
@@ -106,6 +116,31 @@ var frictionPlugin = function (factory, owner) {
         setNoisiness(Friction.friction, noisinessParam.value);
     }.bind(this);
 
+
+    freq1Param.trigger = function () {
+        Friction.friction.obj1.freqs[0] = freq1Param.value;
+    }.bind(this);
+
+    freq2Param.trigger = function () {
+        Friction.friction.obj1.freqs[1] = freq2Param.value;
+    }.bind(this);
+
+    freq3Param.trigger = function () {
+        Friction.friction.obj1.freqs[2] = freq3Param.value;
+    }.bind(this);
+
+
+    decay1Param.trigger = function () {
+        Friction.friction.obj1.decays[0] = decay1Param.value;
+    }.bind(this);
+
+    freq2Param.trigger = function () {
+        Friction.friction.obj1.decays[1] = decay2Param.value;
+    }.bind(this);
+
+    decay3Param.trigger = function () {
+        Friction.friction.obj1.decays[2] = freq3Param.value;
+    }.bind(this);
     //####### AUDIO CODE #######//
 
     this.frictionNode.onaudioprocess = function (e){
