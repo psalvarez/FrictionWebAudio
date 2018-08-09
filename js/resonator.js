@@ -108,8 +108,8 @@ function updatePickup (x, pickup) {
 }
 
 //Resonator functions
-function modalPosition(r, mode) {
-    return clip(r.b1[mode] * r.f[mode] - r.a1[mode] * r.p0[mode] - r.a2[mode] * r.p1[mode], -MAX_POS, MAX_POS);
+function modalPosition(r, mode, f) {
+    return clip(r.b1[mode] * f - r.a1[mode] * r.p0[mode] - r.a2[mode] * r.p1[mode], -MAX_POS, MAX_POS);
 }
 
 function modalVelocity(r, mode, p){
