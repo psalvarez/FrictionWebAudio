@@ -2,12 +2,14 @@
 
 var gain = new Array(1); //nPickups
 
-for (var i = 0; i < 1; i++) {
-    gain[i] = new Array(3+1); //nModes+1
-    gain[i][3] = 0;
-    for (var j = 0; j < 3; j++) {
-        gain[i][j] = 0.8; //Have to find out where this values come from in the original patch
-        gain[i][3] += gain[i][j];
+function startGain (gain) {
+    for (var i = 0; i < 1; i++) {
+        gain[i] = new Array(3+1); //nModes+1
+        gain[i][3] = 0;
+        for (var j = 0; j < 3; j++) {
+            gain[i][j] = 0.8; //Have to find out where this values comes from in the original patch
+            gain[i][3] += gain[i][j];
+        }
     }
 }
 
@@ -19,7 +21,8 @@ function Resonator () {
     this.freqs= [500, 600, 910];
     this.decays= [0.007, 0.01, 0.007];
     this.weights= [1, 1, 1];
-    this.gains= gain;
+    this.gains= new Array(1);
+    startGain(this.gains);
 
     this.m= [0, 0, 0]; //Masses of each oscillator
     this.k= [0, 0, 0]; //Elastic constant of springs of each oscillator
@@ -44,7 +47,6 @@ function Resonator () {
     this.nPickups= 1; //Number of pickup points
     this.activeModes= 3;//Number of active points
 }
-
 
 //Updates
 function updateModes(r) {
@@ -96,6 +98,14 @@ function updateState (x, mode) {
     x.p1[mode] = (x.v[mode] - x.b0v[mode] * x.p0[mode]) / x.b1v[mode];
 }
 
+function updatePickup (x, pickup) {
+  var mode;
+
+  x.gains[pickup][x.nModes] = 0.0;
+  for (mode = 0; mode < x.activeModes; mode++) {
+    x.gains[pickup][x.nModes] += x.gains[pickup][mode];
+  }
+}
 
 //Resonator functions
 function modalPosition(r, mode) {

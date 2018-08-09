@@ -38,6 +38,7 @@ var frictionPlugin = function (factory, owner) {
     Friction.friction.obj0.weights[0] = 0.001022;
     Friction.friction.obj0.gains[0][0] = 1;
     Friction.friction.obj0.fragmentSize = 1;
+    updatePickup(Friction.friction.obj0, 0);
 
     //This will set the rest of the values automatically, but should be removed when added as controls
 
