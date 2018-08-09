@@ -67,6 +67,16 @@
 
                     <p>Frequency 3</p>
                     <div id="freq3" style="padding-bottom: 1%"></div> <span id="freq3Disp"></span>
+
+
+                    <p>Decay 1</p>
+                    <div id="decay1" style="padding-bottom: 1%"></div> <span id="decay1Disp"></span>
+
+                    <p>Decay 2</p>
+                    <div id="decay2" style="padding-bottom: 1%"></div> <span id="decay2Disp"></span>
+
+                    <p>Decay 3</p>
+                    <div id="decay3" style="padding-bottom: 1%"></div> <span id="decay3Disp"></span>
                     <!-- <div id="myButton"></div> -->
             </div>
 
@@ -216,6 +226,34 @@
             'value': 910
         });
 
+
+        let decay1 = new Nexus.Slider('decay1', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0,
+            'max': 1,
+            'step': 0.001,
+            'value': 0.007
+        });
+
+        let decay2 = new Nexus.Slider('decay2', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0,
+            'max': 1,
+            'step': 0.001,
+            'value': 0.01
+        });
+
+        let decay3 = new Nexus.Slider('decay3', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0,
+            'max': 1,
+            'step': 0.001,
+            'value': 0.007
+        });
+
         //Number boxes
         let forceDisplay = new Nexus.Number('forceDisp');
         forceDisplay.link(externalForce);
@@ -257,6 +295,16 @@
 
         let freq3Display = new Nexus.Number('freq3Disp');
         freq3Display.link(freq3);
+
+
+        let decay1Display = new Nexus.Number('decay1Disp');
+        decay1Display.link(decay1);
+
+        let decay2Display = new Nexus.Number('decay2Disp');
+        decay2Display.link(decay2);
+
+        let decay3Display = new Nexus.Number('decay3Disp');
+        decay3Display.link(decay3);
 
     </script>
 
@@ -362,6 +410,19 @@
 
         freq3.on('change', function(v){
             param.node.parameters.setParameterByName('freq3', v);
+        })
+
+
+        decay1.on('change', function(v){
+            param.node.parameters.setParameterByName('decay1', v);
+        })
+
+        decay2.on('change', function(v){
+            param.node.parameters.setParameterByName('decay2', v);
+        })
+
+        decay3.on('change', function(v){
+            param.node.parameters.setParameterByName('decay3', v);
         })
         // myButton.on('change', function(v) {
         //     console.log(v);

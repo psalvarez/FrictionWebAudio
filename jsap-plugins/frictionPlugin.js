@@ -1,4 +1,4 @@
-decayvar frictionPlugin = function (factory, owner) {
+var frictionPlugin = function (factory, owner) {
     BasePlugin.call(this, factory, owner);
 
     this.onload = function(e) {}
@@ -77,9 +77,11 @@ decayvar frictionPlugin = function (factory, owner) {
     let freq2Param = this.parameters.createNumberParameter("freq2", 600, 20, 20000);
     let freq3Param = this.parameters.createNumberParameter("freq3", 910, 20, 20000);
 
-    let decay1Param = this.parameters.createNumberParameter("decay1", 500, 20, 20000);
-    let decay2Param = this.parameters.createNumberParameter("decay2", 600, 20, 20000);
-    let decay3Param = this.parameters.createNumberParameter("decay3", 910, 20, 20000);
+    let decay1Param = this.parameters.createNumberParameter("decay1", 0.007, 0, 1);
+    let decay2Param = this.parameters.createNumberParameter("decay2", 0.01, 0, 1);
+    let decay3Param = this.parameters.createNumberParameter("decay3", 0.007, 0, 1);
+
+    
 
 
 
@@ -119,27 +121,33 @@ decayvar frictionPlugin = function (factory, owner) {
 
     freq1Param.trigger = function () {
         Friction.friction.obj1.freqs[0] = freq1Param.value;
+        updateModes(Friction.friction.obj1);
     }.bind(this);
 
     freq2Param.trigger = function () {
         Friction.friction.obj1.freqs[1] = freq2Param.value;
+        updateModes(Friction.friction.obj1);
     }.bind(this);
 
     freq3Param.trigger = function () {
         Friction.friction.obj1.freqs[2] = freq3Param.value;
+        updateModes(Friction.friction.obj1);
     }.bind(this);
 
 
     decay1Param.trigger = function () {
         Friction.friction.obj1.decays[0] = decay1Param.value;
+        updateModes(Friction.friction.obj1);
     }.bind(this);
 
-    freq2Param.trigger = function () {
+    decay2Param.trigger = function () {
         Friction.friction.obj1.decays[1] = decay2Param.value;
+        updateModes(Friction.friction.obj1);
     }.bind(this);
 
     decay3Param.trigger = function () {
-        Friction.friction.obj1.decays[2] = freq3Param.value;
+        Friction.friction.obj1.decays[2] = decay3Param.value;
+        updateModes(Friction.friction.obj1);
     }.bind(this);
     //####### AUDIO CODE #######//
 
