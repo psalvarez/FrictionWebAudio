@@ -26,13 +26,48 @@
             <div class="controls-container">
                     <p>Enable Web Audio</p>
                     <div id="audioContext" style="padding-bottom: 1%"></div>
+            </div>
 
-                    <!--### ENTER YOUR NEXUS CONTROLS HERE -->
+            <div class="controls-container">
                     <p>External Force</p>
                     <div id="externalForce" style="padding-bottom: 1%"></div> <span id="forceDisp"></span>
 
                     <p>Normal Force</p>
                     <div id="normalForce" style="padding-bottom: 1%"></div> <span id="normForceDisp"></span>
+            </div>
+
+            <div class="controls-container">
+                    <!-- Modal Parameters-->
+                    <p>Frequency 1</p>
+                    <div id="freq1" style="padding-bottom: 1%"></div> <span id="freq1Disp"></span>
+
+                    <p>Frequency 2</p>
+                    <div id="freq2" style="padding-bottom: 1%"></div> <span id="freq2Disp"></span>
+
+                    <p>Frequency 3</p>
+                    <div id="freq3" style="padding-bottom: 1%"></div> <span id="freq3Disp"></span>
+
+
+                    <p>Decay 1</p>
+                    <div id="decay1" style="padding-bottom: 1%"></div> <span id="decay1Disp"></span>
+
+                    <p>Decay 2</p>
+                    <div id="decay2" style="padding-bottom: 1%"></div> <span id="decay2Disp"></span>
+
+                    <p>Decay 3</p>
+                    <div id="decay3" style="padding-bottom: 1%"></div> <span id="decay3Disp"></span>
+
+                    <p>Gain 1</p>
+                    <div id="gain1" style="padding-bottom: 1%"></div> <span id="gain1Disp"></span>
+
+                    <p>Gain 2</p>
+                    <div id="gain2" style="padding-bottom: 1%"></div> <span id="gain2Disp"></span>
+
+                    <p>Gain 3</p>
+                    <div id="gain3" style="padding-bottom: 1%"></div> <span id="gain3Disp"></span>
+            </div>
+
+            <div class="controls-container">
 
                     <p>Stribeck velocity</p>
                     <div id="stribeck" style="padding-bottom: 1%"></div> <span id="stribeckDisp"></span>
@@ -58,37 +93,6 @@
                     <p>Noisiness</p>
                     <div id="noisiness" style="padding-bottom: 1%"></div> <span id="noisinessDisp"></span>
 
-                    <!-- Modal Parameters-->
-                    <p>Frequency 1</p>
-                    <div id="freq1" style="padding-bottom: 1%"></div> <span id="freq1Disp"></span>
-
-                    <p>Frequency 2</p>
-                    <div id="freq2" style="padding-bottom: 1%"></div> <span id="freq2Disp"></span>
-
-                    <p>Frequency 3</p>
-                    <div id="freq3" style="padding-bottom: 1%"></div> <span id="freq3Disp"></span>
-
-
-                    <p>Decay 1</p>
-                    <div id="decay1" style="padding-bottom: 1%"></div> <span id="decay1Disp"></span>
-
-                    <p>Decay 2</p>
-                    <div id="decay2" style="padding-bottom: 1%"></div> <span id="decay2Disp"></span>
-
-                    <p>Decay 3</p>
-                    <div id="decay3" style="padding-bottom: 1%"></div> <span id="decay3Disp"></span>
-                    <!-- <div id="myButton"></div> -->
-
-
-                    <p>Gain 1</p>
-                    <div id="gain1" style="padding-bottom: 1%"></div> <span id="gain1Disp"></span>
-
-                    <p>Gain 2</p>
-                    <div id="gain2" style="padding-bottom: 1%"></div> <span id="gain2Disp"></span>
-
-                    <p>Gain 3</p>
-                    <div id="gain3" style="padding-bottom: 1%"></div> <span id="gain3Disp"></span>
-                    <!-- <div id="myButton"></div> -->
             </div>
 
             <div class="container">
@@ -284,7 +288,7 @@
             'value': 0.8
         });
 
-        let gain3 = new Nexus.Slider('decay3', {
+        let gain3 = new Nexus.Slider('gain3', {
             'size': [200, 20],
             'mode': 'relative',
             'min': 0,
