@@ -26,6 +26,9 @@
             <div class="controls-container">
                     <p>Enable Web Audio</p>
                     <div id="audioContext" style="padding-bottom: 1%"></div>
+
+                    <p>Master Gain</p>
+                    <div id="masterGain" style="padding-bottom: 1%"></div> <span id="masterGainDisp"></span>
             </div>
 
             <div class="controls-container">
@@ -76,7 +79,7 @@
             <div class="controls-container">
                 <p>Weight</p>
                 <div id="inertialWeight" style="padding-bottom: 1%"></div> <span id="inertialWeightDisp"></span>
-                
+
                 <p>Inertial Fragment Size</p>
                 <div id="inertialSize" style="padding-bottom: 1%"></div> <span id="inertialSizeDisp"></span>
             </div>
@@ -129,6 +132,15 @@
         });
 
         /*** DEFINE NEXUS CONTROLS HERE ***/
+
+        let masterGain = new Nexus.Slider('masterGain', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0,
+            'max': 10,
+            'step': 0.01,
+            'value': 1
+        });
 
         //Friction
         let externalForce = new Nexus.Slider('externalForce', {
@@ -345,6 +357,8 @@
 
 
         /*Number boxes*/
+        let masterGainDisplay = new Nexus.Number('masterGainDisp');
+        masterGainDisplay.link(masterGain);
 
         //Friction
         let forceDisplay = new Nexus.Number('forceDisp');
@@ -469,6 +483,10 @@
 
         audioContextButton.on('change', function(v) {
             context.resume();
+        });
+
+        masterGain.on('change', function(v) {
+            param.node.parameters.setParameterByName('masterGain', v);
         });
 
         /*** ADD EVENT LISTENERS FOR NEXUS ELEMENTS HERE ***/

@@ -12,6 +12,7 @@ var frictionPlugin = function (factory, owner) {
     let length = 4096;
 
     this.frictionNode = this.context.createScriptProcessor(length, 1, 1);
+    this.masterGain = this.context.createGain();
 
     //Control Variables
 
@@ -56,8 +57,12 @@ var frictionPlugin = function (factory, owner) {
     updateModes(Friction.friction.obj0);
     updateModes(Friction.friction.obj1);
 
+    this.masterGain.gain.value = 0.5;
+
     //####### PARAMETERS ########//
 
+    let masterGainParam = this.parameters.createNumberParameter("masterGain", 1, 0, 10);
+    masterGainParam.bindToAudioParam(this.masterGain.gain);
     let extForceParam = this.parameters.createNumberParameter("externalForce", 1, -3, 3);
 
     //Friction Parameters
@@ -213,7 +218,8 @@ var frictionPlugin = function (factory, owner) {
     this.addInput(input);
     this.addOutput(output);
 
-    this.frictionNode.connect(output);
+    this.frictionNode.connect(this.masterGain);
+    this.masterGain.connect(output);
 }
 
 //Add prototype information here
