@@ -78,6 +78,17 @@
                     <p>Decay 3</p>
                     <div id="decay3" style="padding-bottom: 1%"></div> <span id="decay3Disp"></span>
                     <!-- <div id="myButton"></div> -->
+
+
+                    <p>Gain 1</p>
+                    <div id="gain1" style="padding-bottom: 1%"></div> <span id="gain1Disp"></span>
+
+                    <p>Gain 2</p>
+                    <div id="gain2" style="padding-bottom: 1%"></div> <span id="gain2Disp"></span>
+
+                    <p>Gain 3</p>
+                    <div id="gain3" style="padding-bottom: 1%"></div> <span id="gain3Disp"></span>
+                    <!-- <div id="myButton"></div> -->
             </div>
 
             <div class="container">
@@ -254,6 +265,34 @@
             'value': 0.007
         });
 
+
+        let gain1 = new Nexus.Slider('gain1', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0,
+            'max': 1,
+            'step': 0.001,
+            'value': 0.8
+        });
+
+        let gain2 = new Nexus.Slider('gain2', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0,
+            'max': 1,
+            'step': 0.001,
+            'value': 0.8
+        });
+
+        let gain3 = new Nexus.Slider('decay3', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0,
+            'max': 1,
+            'step': 0.001,
+            'value': 0.8
+        });
+
         //Number boxes
         let forceDisplay = new Nexus.Number('forceDisp');
         forceDisplay.link(externalForce);
@@ -306,6 +345,15 @@
         let decay3Display = new Nexus.Number('decay3Disp');
         decay3Display.link(decay3);
 
+
+        let gain1Display = new Nexus.Number('gain1Disp');
+        gain1Display.link(gain1);
+
+        let gain2Display = new Nexus.Number('gain2Disp');
+        gain2Display.link(gain2);
+
+        let gain3Display = new Nexus.Number('gain3Disp');
+        gain3Display.link(gain3);
     </script>
 
     <script type="application/javascript">
@@ -423,6 +471,19 @@
 
         decay3.on('change', function(v){
             param.node.parameters.setParameterByName('decay3', v);
+        })
+
+
+        gain1.on('change', function(v){
+            param.node.parameters.setParameterByName('gain1', v);
+        })
+
+        gain2.on('change', function(v){
+            param.node.parameters.setParameterByName('gain2', v);
+        })
+
+        gain3.on('change', function(v){
+            param.node.parameters.setParameterByName('gain3', v);
         })
         // myButton.on('change', function(v) {
         //     console.log(v);

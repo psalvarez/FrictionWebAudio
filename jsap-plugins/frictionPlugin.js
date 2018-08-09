@@ -81,7 +81,9 @@ var frictionPlugin = function (factory, owner) {
     let decay2Param = this.parameters.createNumberParameter("decay2", 0.01, 0, 1);
     let decay3Param = this.parameters.createNumberParameter("decay3", 0.007, 0, 1);
 
-    
+    let gain1Param = this.parameters.createNumberParameter("gain1", 0.8, 0, 1);
+    let gain2Param = this.parameters.createNumberParameter("gain2", 0.8, 0, 1);
+    let gain3Param = this.parameters.createNumberParameter("gain3", 0.8, 0, 1);
 
 
 
@@ -147,6 +149,22 @@ var frictionPlugin = function (factory, owner) {
 
     decay3Param.trigger = function () {
         Friction.friction.obj1.decays[2] = decay3Param.value;
+        updateModes(Friction.friction.obj1);
+    }.bind(this);
+
+
+    gain1Param.trigger = function () {
+        Friction.friction.obj1.gains[0][0] = gain1Param.value;
+        updateModes(Friction.friction.obj1);
+    }.bind(this);
+
+    gain2Param.trigger = function () {
+        Friction.friction.obj1.gains[0][1] = gain2Param.value;
+        updateModes(Friction.friction.obj1);
+    }.bind(this);
+
+    gain3Param.trigger = function () {
+        Friction.friction.obj1.gains[0][2] = gain3Param.value;
         updateModes(Friction.friction.obj1);
     }.bind(this);
     //####### AUDIO CODE #######//
