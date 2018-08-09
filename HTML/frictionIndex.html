@@ -65,6 +65,12 @@
 
                     <p>Gain 3</p>
                     <div id="gain3" style="padding-bottom: 1%"></div> <span id="gain3Disp"></span>
+
+                    <p>Modal Fragment Size</p>
+                    <div id="modalSize" style="padding-bottom: 1%"></div> <span id="modalSizeDisp"></span>
+
+                    <p>Number of Active Modes</p>
+                    <div id="activeModes" style="padding-bottom: 1%"></div> <span id="activeModesDisp"></span>
             </div>
 
             <div class="controls-container">
@@ -99,7 +105,7 @@
                 <p>Weight</p>
                 <div id="inertialWeight" style="padding-bottom: 1%"></div> <span id="inertialWeightDisp"></span>
 
-                <p>Fragment Size</p>
+                <p>Inertial Fragment Size</p>
                 <div id="inertialSize" style="padding-bottom: 1%"></div> <span id="inertialSizeDisp"></span>
             </div>
 
@@ -234,6 +240,7 @@
         });
 
 
+        //Modal
         let freq1 = new Nexus.Slider('freq1', {
             'size': [200, 20],
             'mode': 'relative',
@@ -317,6 +324,24 @@
             'value': 0.8
         });
 
+        let modalSize = new Nexus.Slider('modalSize', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0.001,
+            'max': 1,
+            'step': 0.00001,
+            'value': 1
+        });
+
+        let activeModes = new Nexus.Slider('activeModes', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 1,
+            'max': 3,
+            'step': 1,
+            'value': 3
+        });
+
 
         /*Number boxes*/
 
@@ -351,6 +376,12 @@
         let noisinessDisplay = new Nexus.Number('noisinessDisp');
         noisinessDisplay.link(noisiness);
 
+        //Inertial
+        let inertialWeightDisplay = new Nexus.Number('inertialWeightDisp');
+        inertialWeightDisplay.link(inertialWeight);
+
+        let inertialSizeDisplay = new Nexus.Number('inertialSizeDisp');
+        inertialSizeDisplay.link(inertialSize);
 
         //Modal
         let freq1Display = new Nexus.Number('freq1Disp');
@@ -382,13 +413,11 @@
         let gain3Display = new Nexus.Number('gain3Disp');
         gain3Display.link(gain3);
 
-        //Inertial
-        let inertialWeightDisplay = new Nexus.Number('inertialWeightDisp');
-        inertialWeightDisplay.link(inertialWeight);
+        let modalSizeDisplay = new Nexus.Number('modalSizeDisp');
+        modalSizeDisplay.link(modalSize);
 
-        let inertialSizeDisplay = new Nexus.Number('inertialSizeDisp');
-        inertialSizeDisplay.link(inertialSize);
-
+        let activeModesDisplay = new Nexus.Number('activeModesDisp');
+        activeModesDisplay.link(activeModes);
 
     </script>
 
@@ -484,7 +513,17 @@
             param.node.parameters.setParameterByName('noisiness', v);
         })
 
+        //Inertial
+        inertialWeight.on('change', function(v){
+            param.node.parameters.setParameterByName('inertialWeight', v);
+        })
 
+        inertialSize.on('change', function(v){
+            param.node.parameters.setParameterByName('inertialSize', v);
+        })
+
+
+        //Modal
         freq1.on('change', function(v){
             param.node.parameters.setParameterByName('freq1', v);
         })
@@ -522,18 +561,13 @@
         gain3.on('change', function(v){
             param.node.parameters.setParameterByName('gain3', v);
         })
-        // myButton.on('change', function(v) {
-        //     console.log(v);
-        //     param.node.parameters.getParameterByName('myButton').onclick();
-        // });
-        
-        //Inertial
-        inertialWeight.on('change', function(v){
-            param.node.parameters.setParameterByName('inertialWeight', v);
+
+        modalSize.on('change', function(v){
+            param.node.parameters.setParameterByName('modalSize', v);
         })
 
-        inertialSize.on('change', function(v){
-            param.node.parameters.setParameterByName('inertialSize', v);
+        activeModes.on('change', function(v){
+            param.node.parameters.setParameterByName('activeModes', v);
         })
 
 

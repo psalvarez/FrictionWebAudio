@@ -71,6 +71,11 @@ var frictionPlugin = function (factory, owner) {
     let viscosityParam = this.parameters.createNumberParameter("viscosity", 5.55555, 0, 10);
     let noisinessParam  = this.parameters.createNumberParameter("noisiness", 0.844167, 0.01, 1);
 
+    //Inertial Resonator Parameters
+
+    let inertialWeightParam = this.parameters.createNumberParameter("inertialWeight", 0.001022, 0.001, 1);
+    let inertialSizeParam = this.parameters.createNumberParameter("inertialSize", 1, 0, 1); //The minimum here should be 0, but it explodes when going below 0.2. Therefore, this is kept as a safety measure until I am able to fix it
+
     //Modal Parameters
     let freq1Param = this.parameters.createNumberParameter("freq1", 500, 20, 20000);
     let freq2Param = this.parameters.createNumberParameter("freq2", 600, 20, 20000);
@@ -84,11 +89,9 @@ var frictionPlugin = function (factory, owner) {
     let gain2Param = this.parameters.createNumberParameter("gain2", 0.8, 0, 1);
     let gain3Param = this.parameters.createNumberParameter("gain3", 0.8, 0, 1);
 
+    let modalSizeParam = this.parameters.createNumberParameter("modalSize", 1, 0, 1);
 
-    //Inertial Resonator Parameters
-
-    let inertialWeightParam = this.parameters.createNumberParameter("inertialWeight", 0.001022, 0.001, 1);
-    let inertialSizeParam = this.parameters.createNumberParameter("inertialSize", 1, 0.3, 1); //The minimum here should be 0, but it explodes when going below 0.2. Therefore, this is kept as a safety measure until I am able to fix it
+    let activeModesParam = this.parameters.createNumberParameter("activeModes", 3, 1, 3);
 
     //Control functions
     extForceParam.trigger = function () {
@@ -135,7 +138,7 @@ var frictionPlugin = function (factory, owner) {
         updateModes(Friction.friction.obj0);
     }.bind(this);
 
-
+    //Modal
     freq1Param.trigger = function () {
         Friction.friction.obj1.freqs[0] = freq1Param.value;
         updateModes(Friction.friction.obj1);
@@ -182,6 +185,16 @@ var frictionPlugin = function (factory, owner) {
         Friction.friction.obj1.gains[0][2] = gain3Param.value;
         updateModes(Friction.friction.obj1);
     }.bind(this);
+
+    activeModesParam.trigger = function () {
+        Friction.friction.obj1.activeModes = activeModes.value;
+        updateModes(Friction.friction.obj1);
+    }.bind(this);
+
+    modalSizeParam.trigger = function () {
+        Friction.friction.obj1.fragmentSize = modalSizeParam.value;
+        updateModes(Friction.friction.obj1);
+    }.bind(this);
     //####### AUDIO CODE #######//
 
     this.frictionNode.onaudioprocess = function (e){
@@ -194,7 +207,6 @@ var frictionPlugin = function (factory, owner) {
                 console.log(audioOut[i]);
             }*/
         }
-
     }
 
     //Add these at the bottom of your plugin
