@@ -95,6 +95,14 @@
 
             </div>
 
+            <div class="controls-container">
+                <p>Weight</p>
+                <div id="inertialWeight" style="padding-bottom: 1%"></div> <span id="inertialWeightDisp"></span>
+
+                <p>Fragment Size</p>
+                <div id="inertialSize" style="padding-bottom: 1%"></div> <span id="inertialSizeDisp"></span>
+            </div>
+
             <div class="container">
                 <p>Spectrogram</p>
                 <div id="spectrogram" align="center"></div>
@@ -115,13 +123,7 @@
 
         /*** DEFINE NEXUS CONTROLS HERE ***/
 
-        // let myButton = new Nexus.TextButton('myButton', {
-        //     'mode': 'button',
-        //     'size': [120,55],
-        //     'state': false,
-        //     'text': 'Button'
-        // });
-
+        //Friction
         let externalForce = new Nexus.Slider('externalForce', {
             'size': [200, 20],
             'mode': 'relative',
@@ -212,6 +214,24 @@
             'value': 0.844167
         });
 
+        //Inertial
+        let inertialWeight = new Nexus.Slider('inertialWeight', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0.001,
+            'max': 1,
+            'step': 0.001,
+            'value': 0.001022
+        });
+
+        let inertialSize = new Nexus.Slider('inertialSize', {
+            'size': [200, 20],
+            'mode': 'relative',
+            'min': 0.001,
+            'max': 1,
+            'step': 0.00001,
+            'value': 1
+        });
 
 
         let freq1 = new Nexus.Slider('freq1', {
@@ -297,7 +317,10 @@
             'value': 0.8
         });
 
-        //Number boxes
+
+        /*Number boxes*/
+
+        //Friction
         let forceDisplay = new Nexus.Number('forceDisp');
         forceDisplay.link(externalForce);
 
@@ -329,7 +352,7 @@
         noisinessDisplay.link(noisiness);
 
 
-
+        //Modal
         let freq1Display = new Nexus.Number('freq1Disp');
         freq1Display.link(freq1);
 
@@ -358,6 +381,15 @@
 
         let gain3Display = new Nexus.Number('gain3Disp');
         gain3Display.link(gain3);
+
+        //Inertial
+        let inertialWeightDisplay = new Nexus.Number('inertialWeightDisp');
+        inertialWeightDisplay.link(inertialWeight);
+
+        let inertialSizeDisplay = new Nexus.Number('inertialSizeDisp');
+        inertialSizeDisplay.link(inertialSize);
+
+
     </script>
 
     <script type="application/javascript">
@@ -411,6 +443,7 @@
 
         /*** ADD EVENT LISTENERS FOR NEXUS ELEMENTS HERE ***/
 
+        //Friction
         externalForce.on('change', function(v){
             param.node.parameters.setParameterByName('externalForce', v);
         })
@@ -493,6 +526,16 @@
         //     console.log(v);
         //     param.node.parameters.getParameterByName('myButton').onclick();
         // });
+        
+        //Inertial
+        inertialWeight.on('change', function(v){
+            param.node.parameters.setParameterByName('inertialWeight', v);
+        })
+
+        inertialSize.on('change', function(v){
+            param.node.parameters.setParameterByName('inertialSize', v);
+        })
+
 
         spectrogram.connect(chainStop);
         oscilloscope.connect(chainStop);
