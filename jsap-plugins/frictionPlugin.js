@@ -63,7 +63,7 @@ var frictionPlugin = function (factory, owner) {
 
     let masterGainParam = this.parameters.createNumberParameter("masterGain", 1, 0, 10);
     masterGainParam.bindToAudioParam(this.masterGain.gain);
-    let extForceParam = this.parameters.createNumberParameter("externalForce", 0.1, -0.3, 0.33);
+    let extForceParam = this.parameters.createNumberParameter("externalForce", 1, -3, 3);
 
     //Friction Parameters
     let normForceParam = this.parameters.createNumberParameter("normalForce", 0.5, 0.005, 1);
