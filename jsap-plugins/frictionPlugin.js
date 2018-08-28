@@ -63,10 +63,10 @@ var frictionPlugin = function (factory, owner) {
 
     let masterGainParam = this.parameters.createNumberParameter("masterGain", 1, 0, 10);
     masterGainParam.bindToAudioParam(this.masterGain.gain);
-    let extForceParam = this.parameters.createNumberParameter("externalForce", 1, -3, 3);
+    let extForceParam = this.parameters.createNumberParameter("externalForce", 0.1, -0.3, 0.33);
 
     //Friction Parameters
-    let normForceParam = this.parameters.createNumberParameter("normalForce", 0.5, 0, 1);
+    let normForceParam = this.parameters.createNumberParameter("normalForce", 0.5, 0.005, 1);
     let stribeckParam = this.parameters.createNumberParameter("stribeck", 0.103036, 0.096, 1);
     let staticParam = this.parameters.createNumberParameter("static", 0.922222, 0.4, 1);
     let dynamicParam = this.parameters.createNumberParameter("dynamic", 0.3775, 0.01, 0.5);
@@ -212,6 +212,7 @@ var frictionPlugin = function (factory, owner) {
                 console.log(audioOut[i]);
             }*/
         }
+        //console.log(extForceParam.value);
     }
 
     //Add these at the bottom of your plugin
