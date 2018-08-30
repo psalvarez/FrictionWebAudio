@@ -208,9 +208,6 @@ var frictionPlugin = function (factory, owner) {
         for (var i = 0; i < length; i++){ //Frame loop
             interactorDSP(Friction.friction, extForceParam.value, 0, 0, 0, 0, 0, outs);
             audioOut[i] = 100000*outs[1]; //For now, we are just picking one pickup point from one object
-            /*if (Math.abs(audioOut[i]) > 0.05) {
-                console.log(audioOut[i]);
-            }*/
         }
         //console.log(extForceParam.value);
     }

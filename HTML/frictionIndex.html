@@ -32,11 +32,9 @@
             </div>
 
             <div class="controls-container">
-                    <p>Slide</p>
-                    <div id="externalForce" style="padding-bottom: 1%"></div> <span id="forceDisp"></span>
+                    <p>Slide/Pressure</p>
+                    <div id="probe" style="padding-bottom: 1%"></div>
 
-                    <p>Pressure</p>
-                    <div id="normalForce" style="padding-bottom: 1%"></div> <span id="normForceDisp"></span>
             </div>
 
             <div class="controls-container">
@@ -143,7 +141,20 @@
         });
 
         //Friction
-        let externalForce = new Nexus.Slider('externalForce', {
+        var probe = new Nexus.Position('probe',{
+          'size': [200,200],
+          'mode': 'absolute',  // "absolute" or "relative"
+          'x': 0,  // initial x value
+          'minX': -3,
+          'maxX': 3,
+          'stepX': 0.06,
+          'y': 0.5,  // initial y value
+          'minY': 0,
+          'maxY': 1,
+          'stepY': 0.01
+        })
+
+        /*let externalForce = new Nexus.Slider('externalForce', {
             'size': [200, 20],
             'mode': 'relative',
             'min': -3,
@@ -159,7 +170,7 @@
             'max': 1,
             'step': 0.01,
             'value': 0.5
-        });
+        });*/
 
         let stribeck = new Nexus.Slider('stribeck', {
             'size': [200, 20],
@@ -361,11 +372,11 @@
         masterGainDisplay.link(masterGain);
 
         //Friction
-        let forceDisplay = new Nexus.Number('forceDisp');
+        /*let forceDisplay = new Nexus.Number('forceDisp');
         forceDisplay.link(externalForce);
 
         let normForceDisplay = new Nexus.Number('normForceDisp');
-        normForceDisplay.link(normalForce);
+        normForceDisplay.link(normalForce);*/
 
         let stribeckDisplay = new Nexus.Number('stribeckDisp');
         stribeckDisplay.link(stribeck);
@@ -492,13 +503,17 @@
         /*** ADD EVENT LISTENERS FOR NEXUS ELEMENTS HERE ***/
 
         //Friction
-        externalForce.on('change', function(v){
+        probe.on('change',function(v) {
+            param.node.parameters.setParameterByName('externalForce', v.x);
+            param.node.parameters.setParameterByName('normalForce', v.y);
+        })
+        /*externalForce.on('change', function(v){
             param.node.parameters.setParameterByName('externalForce', v);
         })
 
         normalForce.on('change', function(v){
             param.node.parameters.setParameterByName('normalForce', v);
-        })
+        })*/
 
         stribeck.on('change', function(v){
             param.node.parameters.setParameterByName('stribeck', v);
