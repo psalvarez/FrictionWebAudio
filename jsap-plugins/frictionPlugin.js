@@ -4,16 +4,13 @@ var frictionPlugin = function (factory, owner) {
     this.onload = function(e) {}
 
     //####### VARIABLES ########//
-
     //Input and output for connecting audio chain
     let input = this.context.createGain();
     let output = this.context.createGain();
 
     let length = 4096;
 
-    this.frictionNode = this.context.createScriptProcessor(length, 1, 1);
     this.masterGain = this.context.createGain();
-
     //Control Variables
 
     //This variable must be eliminated when every control is added
@@ -210,14 +207,17 @@ var frictionPlugin = function (factory, owner) {
             audioOut[i] = 100000*outs[1]; //For now, we are just picking one pickup point from one object
         }
         //console.log(extForceParam.value);
-    }
+    }*/
 
     //Add these at the bottom of your plugin
     this.addInput(input);
     this.addOutput(output);
 
-    this.frictionNode.connect(this.masterGain);
     this.masterGain.connect(output);
+
+
+
+
 }
 
 //Add prototype information here
