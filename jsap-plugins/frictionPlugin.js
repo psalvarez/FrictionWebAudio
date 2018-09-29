@@ -8,8 +8,6 @@ var frictionPlugin = function (factory, owner) {
     let input = this.context.createGain();
     let output = this.context.createGain();
 
-    let length = 4096;
-
     this.masterGain = this.context.createGain();
     //Control Variables
 
@@ -41,7 +39,7 @@ var frictionPlugin = function (factory, owner) {
     updatePickup(Friction.friction.obj0, 0);
 
     //Initial settings (must find a more elegant way of doing this)
-    setNormalForce(Friction.friction, Friction.force);
+    /*setNormalForce(Friction.friction, Friction.force);
     setStribeckVelocity (Friction.friction, Friction.stribeck);
     setStaticCoefficient (Friction.friction, Friction.kStatic);
     setDynamicCoefficient (Friction.friction, Friction.kDynamic);
@@ -196,10 +194,15 @@ var frictionPlugin = function (factory, owner) {
     modalSizeParam.trigger = function () {
         Friction.friction.obj1.fragmentSize = modalSizeParam.value;
         updateModes(Friction.friction.obj1);
-    }.bind(this);
-    //####### AUDIO CODE #######//
+    }.bind(this);*/
 
-    this.frictionNode.onaudioprocess = function (e){
+    //####### AUDIO CODE #######//
+    this.context.audioWorklet.addModule('../js/frictionProcessor.js').then(() => {
+        let frictionNode = new AudioWorkletNode(this.context, 'frictionProcessor');
+        frictionNode.connect(this.masterGain);
+    });
+
+    /*this.frictionNode.onaudioprocess = function (e){
         var outs = new Array (2);
         var audioOut = e.outputBuffer.getChannelData(0);
         for (var i = 0; i < length; i++){ //Frame loop
@@ -214,9 +217,6 @@ var frictionPlugin = function (factory, owner) {
     this.addOutput(output);
 
     this.masterGain.connect(output);
-
-
-
 
 }
 

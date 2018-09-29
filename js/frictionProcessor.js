@@ -3,7 +3,6 @@ class FrictionProcessor extends AudioWorkletProcessor {
   // Custom AudioParams can be defined with this static getter.
   static get parameterDescriptors() {
     return [
-        {name: 'masterGain', defaultValue: 1, minValue: 0, maxValue: 10},
         {name: 'externalForce', defaultValue: 1, minValue: -3, maxValue: 0},
         {name: 'normalForce', defaultValue: 0.5, minValue: 0, maxValue: 0},
         {name: 'stribeck', defaultValue: 0.103036, minValue: 0.096, maxValue: 0},
@@ -50,7 +49,7 @@ class FrictionProcessor extends AudioWorkletProcessor {
     let extForceValue = parameters.externalForce;
     var outs = new Array (2);
 
-    for (var i = 0; i < length; i++){ //Frame loop
+    for (var i = 0; i < inputChannel0.length; i++){ //Frame loop
         interactorDSP(Friction.friction, extForceValue, 0, 0, 0, 0, 0, outs); //I dknw how to send the friction object to interactorDSP from this scope
         audioOut[i] = 100000*outs[1]; //For now, we are just picking one pickup point from one object
     }
