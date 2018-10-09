@@ -12,8 +12,8 @@ var frictionPlugin = function (factory, owner) {
     //Control Variables
 
     //This variable must be eliminated when every control is added
-    let Friction = {
-        friction:  Object.create(Interactor),
+    /*let Friction = {
+        friction:  Interactor(),//Object.create(Interactor),
 
         force: 0.5, //Normal force in Newtons
 
@@ -36,7 +36,7 @@ var frictionPlugin = function (factory, owner) {
     Friction.friction.obj0.weights[0] = 0.001022;
     Friction.friction.obj0.gains[0][0] = 1;
     Friction.friction.obj0.fragmentSize = 1;
-    updatePickup(Friction.friction.obj0, 0);
+    updatePickup(Friction.friction.obj0, 0);*/
 
     //Initial settings (must find a more elegant way of doing this)
     /*setNormalForce(Friction.friction, Friction.force);
@@ -197,6 +197,9 @@ var frictionPlugin = function (factory, owner) {
     }.bind(this);*/
 
     //####### AUDIO CODE #######//
+    /*this.context.audioWorklet.addModule('../js/interactor.js');
+    this.context.audioWorklet.addModule('../js/resonator.js');
+    this.context.audioWorklet.addModule('../js/utilities.js');*/
     this.context.audioWorklet.addModule('../js/frictionProcessor.js').then(() => {
         let frictionNode = new AudioWorkletNode(this.context, 'frictionProcessor');
         frictionNode.connect(this.masterGain);

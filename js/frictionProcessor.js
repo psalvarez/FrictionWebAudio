@@ -1,3 +1,5 @@
+import {Interactor} from "./interactor.js";
+
 class FrictionProcessor extends AudioWorkletProcessor {
 
   // Custom AudioParams can be defined with this static getter.
@@ -33,7 +35,7 @@ class FrictionProcessor extends AudioWorkletProcessor {
     // The super constructor call is required.
     super();
 
-    //this.fricition //Declare the friction object here
+    this.friction = new Interactor();//Object.create(Interactor); //This doesn't work. Have to think how to use all the objects inside the processor
   }
 
   process(inputs, outputs, parameters) {
@@ -49,9 +51,9 @@ class FrictionProcessor extends AudioWorkletProcessor {
     let extForceValue = parameters.externalForce;
     var outs = new Array (2);
 
-    for (var i = 0; i < inputChannel0.length; i++){ //Frame loop
-        interactorDSP(Friction.friction, extForceValue, 0, 0, 0, 0, 0, outs); //I dknw how to send the friction object to interactorDSP from this scope
-        audioOut[i] = 100000*outs[1]; //For now, we are just picking one pickup point from one object
+    for (var i = 0; i < outputChannel0.length; i++){ //Frame loop
+        Interactor.interactorDSP(this.friction, extForceValue, 0, 0, 0, 0, 0, outs); //I dknw how to send the friction object to interactorDSP from this scope
+        outputChannel0[i] = 100000 * outs[1]; //For now, we are just picking one pickup point from one object
     }
     //console.log(extForceValue);
 
