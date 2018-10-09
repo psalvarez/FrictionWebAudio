@@ -52,7 +52,7 @@ class FrictionProcessor extends AudioWorkletProcessor {
     var outs = new Array (2);
 
     for (var i = 0; i < outputChannel0.length; i++){ //Frame loop
-        Interactor.interactorDSP(this.friction, extForceValue, 0, 0, 0, 0, 0, outs); //I dknw how to send the friction object to interactorDSP from this scope
+        this.friction.interactorDSP(this.friction, extForceValue, 0, 0, 0, 0, 0, outs); //I dknw how to send the friction object to interactorDSP from this scope
         outputChannel0[i] = 100000 * outs[1]; //For now, we are just picking one pickup point from one object
     }
     //console.log(extForceValue);

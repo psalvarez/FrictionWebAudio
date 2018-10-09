@@ -32,64 +32,14 @@ var st = { //might have to change this declarationwhen I add new models
 
 //var Interactor = {
 function Interactor () {
-    var obj0 = new Resonator();
-    var obj1 = new Resonator();
-    var contact0 = 0; //Not sure of what contacts are, but they seem to be not working when != 0
-    var contact1 = 0;
-    var energy = 0;
-    var state = st;//Look for another way to declare this as an empty object
+    this.obj0 = new Resonator();
+    this.obj1 = new Resonator();
+    this.contact0 = 0; //Not sure of what contacts are, but they seem to be not working when != 0
+    this.contact1 = 0;
+    this.energy = 0;
+    this.state = st;//Look for another way to declare this as an empty object
     //double (*computeForce)(SDTInteractor *x),
 
-
-    //----Friction variable setting----//
-    function setNormalForce (inter, f) {
-        var s = inter.state;
-        s.fn = Math.max(0.0, f /*Friction.force*/);
-        s.fs = s.fn * s.ks;
-        s.fc = s.fn * s.kd;
-    }
-    //Set stribeck
-    function setStribeckVelocity (inter, f) {
-        var s = inter.state;
-        s.vs = Math.max(0.0, f /*Friction.stribeck*/);
-    }
-    //Static coefficient
-    function setStaticCoefficient (inter, f) {
-        var s = inter.state;
-        s.ks = clip(f, 0.0, 1.0);
-        s.fs = s.fn * s.ks;
-    }
-    //Dynamic coefficient
-    function setDynamicCoefficient (inter, f) {
-        var s = inter.state;
-        s.kd = clip(f /*Friction.kDynamic*/, 0.0, 1.0);
-        s.fc = s.fn * s.kd;
-    }
-    //Breakaway
-    function setBreakAway (inter, f) {
-        var s = inter.state;
-        s.kba = clip(f, 0.0, 1.0);
-    }
-    //Stiffness
-    function setStiffness (inter, f) {
-        var s = inter.state;
-        s.s0 = Math.max(0.0, f);
-    }
-    //Dissipation
-    function setDissipation (inter, f) {
-        var s = inter.state;
-        s.s1 = Math.max(0.0, f);
-    }
-    //Viscosity
-    function setViscosity (inter, f) {
-        var s = inter.state;
-        s.s2 = Math.max(0.0, f);
-    }
-    //Noisiness
-    function setNoisiness (inter, f) {
-        var s = inter.state;
-        s.s3 = Math.max(0.0, f);
-    }
 
 
     //----Friction Interactor functions----//
@@ -149,43 +99,96 @@ function Interactor () {
         x.energy = -w;
         return f;
     }
-
-    function/*static*/ interactorDSP (x, f0, v0, s0, f1, v1, s1, outs) {
-        /*x: interactor
-        f: external forces on resonators
-        v: velocities on resonators
-        s: sizes of resonators
-        */
-        var f, p, nPickups0, nPickups1;
-        //Apply external forces
-        x.obj0.resonatorApplyForce(x.obj0, x.contact0, f0); //inertial
-        x.obj1.resonatorApplyForce(x.obj1, x.contact1, f1); //modal
-
-        //Apply friction force
-        f = interactorComputeForce(x);
-        x.obj0.resonatorApplyForce(x.obj0, x.contact0, f); //inertial
-        x.obj1.resonatorApplyForce(x.obj1, x.contact1, -f); //modal
-
-        // Update state of inertial object
-        nPickups0 = 1;
-        if (x.obj0) {
-          resonatorDSP(x.obj0);
-          nPickups0 = x.obj0.nPickups;
-          for (var pickup = 0; pickup < nPickups0; pickup++) {
-            outs[pickup] = resonatorGetPosition(x.obj0, pickup);
-          }
-        }
-
-        // Update state of modal object
-        nPickups1 = 1;
-        if (x.obj1) {
-            resonatorDSP(x.obj1);
-            nPickups1 = x.obj1.nPickups;
-            for (var pickup = 0; pickup < nPickups1; pickup++) {
-                outs[nPickups0 + pickup] = resonatorGetPosition(x.obj1, pickup);
-            }
-        }
-        //console.log(outs[0]);
-    }
 };
+
+Interactor.prototype.interactorDSP = function (x, f0, v0, s0, f1, v1, s1, outs) {
+    /*x: interactor
+    f: external forces on resonators
+    v: velocities on resonators
+    s: sizes of resonators
+    */
+    var f, p, nPickups0, nPickups1;
+    //Apply external forces
+    x.obj0.resonatorApplyForce(x.obj0, x.contact0, f0); //inertial
+    x.obj1.resonatorApplyForce(x.obj1, x.contact1, f1); //modal
+
+    //Apply friction force
+    f = interactorComputeForce(x);
+    x.obj0.resonatorApplyForce(x.obj0, x.contact0, f); //inertial
+    x.obj1.resonatorApplyForce(x.obj1, x.contact1, -f); //modal
+
+    // Update state of inertial object
+    nPickups0 = 1;
+    if (x.obj0) {
+      resonatorDSP(x.obj0);
+      nPickups0 = x.obj0.nPickups;
+      for (var pickup = 0; pickup < nPickups0; pickup++) {
+        outs[pickup] = resonatorGetPosition(x.obj0, pickup);
+      }
+    }
+
+    // Update state of modal object
+    nPickups1 = 1;
+    if (x.obj1) {
+        resonatorDSP(x.obj1);
+        nPickups1 = x.obj1.nPickups;
+        for (var pickup = 0; pickup < nPickups1; pickup++) {
+            outs[nPickups0 + pickup] = resonatorGetPosition(x.obj1, pickup);
+        }
+    };
+    //console.log(outs[0]);
+};
+
+//----Friction variable setting----//
+Interactor.prototype.setNormalForce = function (inter, f) {
+    var s = inter.state;
+    s.fn = Math.max(0.0, f /*Friction.force*/);
+    s.fs = s.fn * s.ks;
+    s.fc = s.fn * s.kd;
+};
+//Set stribeck
+Interactor.prototype.setStribeckVelocity = function (inter, f) {
+    var s = inter.state;
+    s.vs = Math.max(0.0, f /*Friction.stribeck*/);
+};
+//Static coefficient
+Interactor.prototype.setStaticCoefficient = function (inter, f) {
+    var s = inter.state;
+    s.ks = clip(f, 0.0, 1.0);
+    s.fs = s.fn * s.ks;
+};
+//Dynamic coefficient
+Interactor.prototype.setDynamicCoefficient = function (inter, f) {
+    var s = inter.state;
+    s.kd = clip(f /*Friction.kDynamic*/, 0.0, 1.0);
+    s.fc = s.fn * s.kd;
+};
+//Breakaway
+Interactor.prototype.setBreakAway = function (inter, f) {
+    var s = inter.state;
+    s.kba = clip(f, 0.0, 1.0);
+};
+//Stiffness
+Interactor.prototype.setStiffness = function (inter, f) {
+    var s = inter.state;
+    s.s0 = Math.max(0.0, f);
+};
+//Dissipation
+Interactor.prototype.setDissipation = function (inter, f) {
+    var s = inter.state;
+    s.s1 = Math.max(0.0, f);
+};
+//Viscosity
+Interactor.prototype.setViscosity = function (inter, f) {
+    var s = inter.state;
+    s.s2 = Math.max(0.0, f);
+};
+//Noisiness
+Interactor.prototype.setNoisiness = function (inter, f) {
+    var s = inter.state;
+    s.s3 = Math.max(0.0, f);
+};
+
+
+
 export {Interactor};
