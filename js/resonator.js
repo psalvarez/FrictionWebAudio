@@ -57,16 +57,6 @@ function Resonator () {
     this.nPickups= 1; //Number of pickup points
     this.activeModes= 3;//Number of active points
 
-    this.distributeForce = function (x, pickup, fs, f) {
-
-        for (var mode = 0; mode < x.activeModes; mode++) {
-            if(x.gains[pickup][x.nModes] > 0.0 ){
-                fs[mode] = f * x.gains[pickup][mode] / x.gains[pickup][x.nModes];
-            } else {
-                fs[mode] = f / x.activeModes;
-            }
-        }
-    }
 };
 
 //Updates
@@ -141,7 +131,16 @@ Resonator.prototype.modalEnergy = function (r, mode, p, v) {
     return 0.5 * (r.k[mode] * p * p + r.m[mode] * v * v);
 }
 
+Resonator.prototype.distributeForce = function (x, pickup, fs, f) {
 
+    for (var mode = 0; mode < x.activeModes; mode++) {
+        if(x.gains[pickup][x.nModes] > 0.0 ){
+            fs[mode] = f * x.gains[pickup][mode] / x.gains[pickup][x.nModes];
+        } else {
+            fs[mode] = f / x.activeModes;
+        }
+    }
+}
 
 Resonator.prototype.resonatorApplyForce = function (reson, pickup, f) {
     var fs = new Array(reson.activeModes); //not sure of what this is
@@ -159,8 +158,8 @@ Resonator.prototype.resonatorDSP = function (r) { //Updates internal state of re
     var p;
 
     for (var mode = 0; mode < r.activeModes; mode++) {
-        p = modalPosition(r, mode, r.f[mode]);
-        r.v[mode] = modalVelocity(r, mode, p);
+        p = this.modalPosition(r, mode, r.f[mode]);
+        r.v[mode] = this.modalVelocity(r, mode, p);
         r.p1[mode] = r.p0[mode];
         r.p0[mode] = p;
         r.f[mode] = 0.0;
@@ -174,11 +173,11 @@ Resonator.prototype.resonatorComputeEnergy = function (r, pickup, f) {
     out = 0.0;
     if (pickup < r.nPickups) {
         if (!isNormal(f)) f = 0.0;
-        distributeForce(r, pickup, fs, f);
+        this.distributeForce(r, pickup, fs, f);
         for (var mode = 0; mode < r.activeModes; mode++) {
-            p = modalPosition(r, mode, r.f[mode] + fs[mode]);
-            v = modalVelocity(r, mode, p);
-            out += modalEnergy(r, mode, p, v) * r.gains[pickup][mode];
+            p = this.modalPosition(r, mode, r.f[mode] + fs[mode]);
+            v = this.modalVelocity(r, mode, p);
+            out += this.modalEnergy(r, mode, p, v) * r.gains[pickup][mode];
         }
     }
     return out;

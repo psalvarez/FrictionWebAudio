@@ -38,69 +38,65 @@ function Interactor () {
     this.contact1 = 0;
     this.energy = 0;
     this.state = st;//Look for another way to declare this as an empty object
-    //double (*computeForce)(SDTInteractor *x),
-
-
-
-    //----Friction Interactor functions----//
-    function frictionElastoPlastic(x) {
-        var s = x.state;
-        var v, vRatio, vSgn, zSgn, zss, zba, alpha, dz, w, f;
-
-        x.energy = 0.0;
-        v = resonatorGetVelocity(x.obj1, x.contact1) - resonatorGetVelocity(x.obj0, x.contact0);
-
-        //Relative velocity
-        if (s.fn <= 0.0) {
-          s.z = 0.0;
-          return 0.0;
-        }
-        vRatio = v / s.vs;
-        vSgn = Math.sign(v);
-        zSgn = Math.sign(s.z);
-        zss = vSgn * (s.fc + (s.fs - s.fc) * Math.exp(-vRatio * vRatio)) / s.s0; //Steady state friction characteristic
-        zba = vSgn * s.kba * s.fc / s.s0; //Breakaway deflection
-
-        //Start of Alpha function definition
-        if (vSgn != zSgn) alpha = 0.0;
-        else if (Math.abs(s.z) < Math.abs(zba)) alpha = 0.0;
-        else if (Math.abs(s.z) < Math.abs(zss)) alpha = 0.5 + 0.5 * Math.sin(Math.PI * (s.z - 0.5 * (zss + zba)) / (zss - zba));
-        else alpha = 1.0;
-        //End of Alpha definition
-
-        dz = v * (1.0 - alpha * s.z / zss);
-        if (!isNormal(dz)) dz = 0.0;
-        w = whiteNoise() * Math.sqrt(Math.abs(v) * s.fn);
-        f = s.s0 * s.z + s.s1 * dz + s.s2 * v + s.s3 * w;
-        s.z += dz * (1/context.sampleRate);
-        return f;
-    }
-
-    function interactorComputeForce(x) {
-        var f, h, w, f0, f1, count;
-        /*f = friction force
-
-        */
-        f = frictionElastoPlastic(x); //In the SDT this function is a template, included in the interactor class as an atribute
-        h = resonatorComputeEnergy(x.obj0, x.contact0, 0.0) + resonatorComputeEnergy(x.obj1, x.contact1, 0.0) + x.energy; //Total energy in resonators before applying the force
-        w = resonatorComputeEnergy(x.obj0, x.contact0, f) + resonatorComputeEnergy(x.obj1, x.contact1, -f) - h; //Energy difference after applying the force (work?)
-        count = 0;
-        if (w > 0.0) {
-          f0 = 0.0;
-          f1 = f;
-          while ((w > 0.0 || w < -MAX_ERROR * h) && count < MAX_ITERATIONS) {
-            f = (f0 + f1) / 2.0;
-            w = resonatorComputeEnergy(x.obj0, x.contact0, f) + resonatorComputeEnergy(x.obj1, x.contact1, -f) - h;
-            if (w < 0) f0 = f;
-            else f1 = f;
-            count++;
-          }
-        }
-        x.energy = -w;
-        return f;
-    }
+    //double (*computeForce)(SDTInteractor *x)
 };
 
+//----Friction Interactor functions----//
+Interactor.prototype.frictionElastoPlastic = function (x) {
+    var s = x.state;
+    var v, vRatio, vSgn, zSgn, zss, zba, alpha, dz, w, f;
+
+    x.energy = 0.0;
+    v = x.obj1.resonatorGetVelocity(x.obj1, x.contact1) - x.obj0.resonatorGetVelocity(x.obj0, x.contact0);
+
+    //Relative velocity
+    if (s.fn <= 0.0) {
+      s.z = 0.0;
+      return 0.0;
+    }
+    vRatio = v / s.vs;
+    vSgn = Math.sign(v);
+    zSgn = Math.sign(s.z);
+    zss = vSgn * (s.fc + (s.fs - s.fc) * Math.exp(-vRatio * vRatio)) / s.s0; //Steady state friction characteristic
+    zba = vSgn * s.kba * s.fc / s.s0; //Breakaway deflection
+
+    //Start of Alpha function definition
+    if (vSgn != zSgn) alpha = 0.0;
+    else if (Math.abs(s.z) < Math.abs(zba)) alpha = 0.0;
+    else if (Math.abs(s.z) < Math.abs(zss)) alpha = 0.5 + 0.5 * Math.sin(Math.PI * (s.z - 0.5 * (zss + zba)) / (zss - zba));
+    else alpha = 1.0;
+    //End of Alpha definition
+
+    dz = v * (1.0 - alpha * s.z / zss);
+    if (!isNormal(dz)) dz = 0.0;
+    w = whiteNoise() * Math.sqrt(Math.abs(v) * s.fn);
+    f = s.s0 * s.z + s.s1 * dz + s.s2 * v + s.s3 * w;
+    s.z += dz * (1/context.sampleRate);
+    return f;
+}
+Interactor.prototype.interactorComputeForce = function (x) {
+    var f, h, w, f0, f1, count;
+    /*f = friction force
+
+    */
+    f = this.frictionElastoPlastic(x); //In the SDT this function is a template, included in the interactor class as an atribute
+    h = x.obj0.resonatorComputeEnergy(x.obj0, x.contact0, 0.0) + x.obj1.resonatorComputeEnergy(x.obj1, x.contact1, 0.0) + x.energy; //Total energy in resonators before applying the force
+    w = x.obj0.resonatorComputeEnergy(x.obj0, x.contact0, f) + x.obj1.resonatorComputeEnergy(x.obj1, x.contact1, -f) - h; //Energy difference after applying the force (work?)
+    count = 0;
+    if (w > 0.0) {
+      f0 = 0.0;
+      f1 = f;
+      while ((w > 0.0 || w < -MAX_ERROR * h) && count < MAX_ITERATIONS) {
+        f = (f0 + f1) / 2.0;
+        w = x.obj0.resonatorComputeEnergy(x.obj0, x.contact0, f) + x.obj1.resonatorComputeEnergy(x.obj1, x.contact1, -f) - h;
+        if (w < 0) f0 = f;
+        else f1 = f;
+        count++;
+      }
+    }
+    x.energy = -w;
+    return f;
+}
 Interactor.prototype.interactorDSP = function (x, f0, v0, s0, f1, v1, s1, outs) {
     /*x: interactor
     f: external forces on resonators
@@ -113,27 +109,27 @@ Interactor.prototype.interactorDSP = function (x, f0, v0, s0, f1, v1, s1, outs) 
     x.obj1.resonatorApplyForce(x.obj1, x.contact1, f1); //modal
 
     //Apply friction force
-    f = interactorComputeForce(x);
+    f = this.interactorComputeForce(x);
     x.obj0.resonatorApplyForce(x.obj0, x.contact0, f); //inertial
     x.obj1.resonatorApplyForce(x.obj1, x.contact1, -f); //modal
 
     // Update state of inertial object
     nPickups0 = 1;
     if (x.obj0) {
-      resonatorDSP(x.obj0);
+      x.obj0.resonatorDSP(x.obj0);
       nPickups0 = x.obj0.nPickups;
       for (var pickup = 0; pickup < nPickups0; pickup++) {
-        outs[pickup] = resonatorGetPosition(x.obj0, pickup);
+        outs[pickup] = x.obj0.resonatorDSP(x.obj0, pickup);
       }
     }
 
     // Update state of modal object
     nPickups1 = 1;
     if (x.obj1) {
-        resonatorDSP(x.obj1);
+        x.obj1.resonatorDSP(x.obj1);
         nPickups1 = x.obj1.nPickups;
         for (var pickup = 0; pickup < nPickups1; pickup++) {
-            outs[nPickups0 + pickup] = resonatorGetPosition(x.obj1, pickup);
+            outs[nPickups0 + pickup] = x.obj1.resonatorDSP(x.obj1, pickup);
         }
     };
     //console.log(outs[0]);
