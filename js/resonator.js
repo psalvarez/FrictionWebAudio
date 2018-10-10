@@ -62,7 +62,7 @@ function Resonator () {
 //Updates
 Resonator.prototype.updateModes = function (r) {
     for (var mode = 0; mode < r.activeModes; mode++) {
-        updateMode(r, mode);
+        this.updateMode(r, mode);
     }
 }
 

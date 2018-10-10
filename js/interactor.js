@@ -1,6 +1,16 @@
-//*****FRICTION*****//
+//*****INTERACTOR*****//
 
 import{Resonator} from "./resonator.js";
+import{
+    MAX_ERROR,
+    MAX_ITERATIONS,
+    MAX_POS,
+    LCG_MULT,
+    LCG_ADD,
+    clip,
+    isNormal,
+    whiteNoise
+} from "./utilities.js";
 //Friction state variable
 var st = { //might have to change this declarationwhen I add new models
     fn : 0.0,

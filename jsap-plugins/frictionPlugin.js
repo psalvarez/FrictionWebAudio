@@ -9,8 +9,8 @@ var frictionPlugin = function (factory, owner) {
     let output = this.context.createGain();
 
     this.masterGain = this.context.createGain();
-    //Control Variables
 
+    //Control Variables
     //This variable must be eliminated when every control is added
     /*let Friction = {
         friction:  Interactor(),//Object.create(Interactor),
@@ -52,7 +52,7 @@ var frictionPlugin = function (factory, owner) {
     updateModes(Friction.friction.obj0);
     updateModes(Friction.friction.obj1);
 
-    this.masterGain.gain.value = 0.5;
+    this.masterGain.gain.value = 0.5;*/
 
     //####### PARAMETERS ########//
 
@@ -194,7 +194,7 @@ var frictionPlugin = function (factory, owner) {
     modalSizeParam.trigger = function () {
         Friction.friction.obj1.fragmentSize = modalSizeParam.value;
         updateModes(Friction.friction.obj1);
-    }.bind(this);*/
+    }.bind(this);
 
     //####### AUDIO CODE #######//
     /*this.context.audioWorklet.addModule('../js/interactor.js');
