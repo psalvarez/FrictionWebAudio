@@ -5,6 +5,7 @@ const MAX_POS = 10000.0;
 const LCG_MULT = 1664525;
 const LCG_ADD = 1013904223;
 
+
 //Functions
 function clip(x, min, max) {
   if (x < min) x = min;

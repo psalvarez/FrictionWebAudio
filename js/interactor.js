@@ -81,7 +81,7 @@ Interactor.prototype.frictionElastoPlastic = function (x) {
     if (!isNormal(dz)) dz = 0.0;
     w = whiteNoise() * Math.sqrt(Math.abs(v) * s.fn);
     f = s.s0 * s.z + s.s1 * dz + s.s2 * v + s.s3 * w;
-    s.z += dz * (1/context.sampleRate);
+    s.z += dz * (1/AudioWorkletGlobalScope.sampleRate);
     return f;
 }
 Interactor.prototype.interactorComputeForce = function (x) {

@@ -11,48 +11,7 @@ var frictionPlugin = function (factory, owner) {
     this.masterGain = this.context.createGain();
 
     //Control Variables
-    //This variable must be eliminated when every control is added
-    /*let Friction = {
-        friction:  Interactor(),//Object.create(Interactor),
-
-        force: 0.5, //Normal force in Newtons
-
-        //These are control variables. The variables that intervene in the calculations are derived from these
-        stribeck: 0.1,
-        kStatic: 0.9,
-        kDynamic: 0.37,
-        stiffness: 1606.6,
-        dissipation: 35.92,
-        viscosity: 5.5,
-        noisiness: 0.84,
-        breakAway: 0.725,
-        contact0: 0,
-        contact1: 0
-    }
-
-    Friction.friction.obj0.activeModes = 1;
-    Friction.friction.obj0.freqs[0] = 0;
-    Friction.friction.obj0.decays[0] = 0;
-    Friction.friction.obj0.weights[0] = 0.001022;
-    Friction.friction.obj0.gains[0][0] = 1;
-    Friction.friction.obj0.fragmentSize = 1;
-    updatePickup(Friction.friction.obj0, 0);*/
-
-    //Initial settings (must find a more elegant way of doing this)
-    /*setNormalForce(Friction.friction, Friction.force);
-    setStribeckVelocity (Friction.friction, Friction.stribeck);
-    setStaticCoefficient (Friction.friction, Friction.kStatic);
-    setDynamicCoefficient (Friction.friction, Friction.kDynamic);
-    setBreakAway(Friction.friction, Friction.breakAway);
-    setStiffness(Friction.friction, Friction.stiffness);
-    setDissipation(Friction.friction, Friction.dissipation);
-    setViscosity(Friction.friction, Friction.viscosity);
-    setNoisiness(Friction.friction, Friction.noisiness);
-
-    updateModes(Friction.friction.obj0);
-    updateModes(Friction.friction.obj1);
-
-    this.masterGain.gain.value = 0.5;*/
+    this.masterGain.gain.value = 0.5;
 
     //####### PARAMETERS ########//
 
@@ -94,12 +53,9 @@ var frictionPlugin = function (factory, owner) {
     let activeModesParam = this.parameters.createNumberParameter("activeModes", 3, 1, 3);
 
     //Control functions
-    extForceParam.trigger = function () {
-        let a = 2;
-    }.bind(this);
 
     //Friction
-    normForceParam.trigger = function () {
+    /*normForceParam.trigger = function () {
         setNormalForce(Friction.friction, normForceParam.value);
     }.bind(normForceParam);
     stribeckParam.trigger = function () {
@@ -194,12 +150,10 @@ var frictionPlugin = function (factory, owner) {
     modalSizeParam.trigger = function () {
         Friction.friction.obj1.fragmentSize = modalSizeParam.value;
         updateModes(Friction.friction.obj1);
-    }.bind(this);
+    }.bind(this);*/
 
     //####### AUDIO CODE #######//
-    /*this.context.audioWorklet.addModule('../js/interactor.js');
-    this.context.audioWorklet.addModule('../js/resonator.js');
-    this.context.audioWorklet.addModule('../js/utilities.js');*/
+
     this.context.audioWorklet.addModule('../js/frictionProcessor.js').then(() => {
         let frictionNode = new AudioWorkletNode(this.context, 'frictionProcessor');
         frictionNode.connect(this.masterGain);
@@ -222,6 +176,7 @@ var frictionPlugin = function (factory, owner) {
     this.masterGain.connect(output);
 
 }
+
 
 //Add prototype information here
 frictionPlugin.prototype = Object.create(BasePlugin.prototype);

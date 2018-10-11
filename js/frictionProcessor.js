@@ -1,4 +1,5 @@
 import {Interactor} from "./interactor.js";
+//import {sampleRate} from "./utilities.js";
 
 class FrictionProcessor extends AudioWorkletProcessor {
 
@@ -78,7 +79,6 @@ class FrictionProcessor extends AudioWorkletProcessor {
             this.friction.interactorDSP(this.friction, extForceValue, 0, 0, 0, 0, 0, outs); //I dknw how to send the friction object to interactorDSP from this scope
             outputChannel0[i] = 100000 * outs[1]; //For now, we are just picking one pickup point from one object
         }
-        //console.log(extForceValue);
         return true;
     }
 }

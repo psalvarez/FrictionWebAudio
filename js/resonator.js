@@ -7,7 +7,7 @@ import{
     LCG_ADD,
     clip,
     isNormal,
-    whiteNoise
+    whiteNoise,
 } from "./utilities.js";
 
 var gain = new Array(1); //nPickups
@@ -69,7 +69,7 @@ Resonator.prototype.updateModes = function (r) {
 Resonator.prototype.updateMode = function (x, mode) {
     var u, w, wt, m, k, d, g, r, coswt, sincwt, tsincwt;
 
-    var timeStep = 1/context.sampleRate;
+    var timeStep = 1/AudioWorkletGlobalScope.sampleRate;
 
     u = Math.sqrt(x.fragmentSize);
     w = 2*Math.PI * x.freqs[mode];
@@ -90,7 +90,7 @@ Resonator.prototype.updateMode = function (x, mode) {
         x.b1v[mode] = -r / tsincwt;
         x.v[mode] *= Math.sqrt(x.m[mode] / m);
         x.p0[mode] *= k > 0.0 ? Math.sqrt(x.k[mode] / k) : 1.0;
-        updateState(x, mode);
+        this.updateState(x, mode);
         x.m[mode] = m;
         x.k[mode] = k;
     }
